@@ -28,7 +28,6 @@ var MultiSelectField = React.createClass({
 		};
 	},
 	handleSelectChange (value) {
-		console.log('You\'ve selected:', value);
 		this.setState({ value });
 	},
 	toggleDisabled (e) {
@@ -48,7 +47,7 @@ var MultiSelectField = React.createClass({
 		return (
 			<div className="section">
 				<h3 className="section-heading">{this.props.label}</h3>
-				<Select multi simpleValue multiSelectAll disabled={this.state.disabled} value={this.state.value} placeholder="Select your favourite(s)" options={this.state.options} onChange={this.handleSelectChange} />
+				<Select multi simpleValue multiSelectAll={this.state.selectAll} scrollToFocused={!this.state.selectAll} disabled={this.state.disabled} value={this.state.value} placeholder="Select your favourite(s)" options={this.state.options} onChange={this.handleSelectChange} />
 
 				<div className="checkbox-list">
 					<label className="checkbox">
@@ -60,7 +59,7 @@ var MultiSelectField = React.createClass({
 						<span className="checkbox-label">I don't like Chocolate (disabled the option)</span>
 					</label>
 					<label className="checkbox">
-						<input type="checkbox" className="checkbox-control" checked={this.state.multiSelectAll} onChange={this.toggleSelectAll} />
+						<input type="checkbox" className="checkbox-control" checked={this.state.selectAll} onChange={this.toggleSelectAll} />
 						<span className="checkbox-label">Show select all option</span>
 					</label>
 				</div>

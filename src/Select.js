@@ -107,6 +107,7 @@ const Select = React.createClass({
 		required: React.PropTypes.bool,             // applies HTML5 required attribute when needed
 		resetValue: React.PropTypes.any,            // value to use when you clear the control
 		scrollMenuIntoView: React.PropTypes.bool,   // boolean to enable the viewport to shift so that the full menu fully visible when engaged
+		scrollToFocused: React.PropTypes.bool,      // scroll menu to focused element
 		searchable: React.PropTypes.bool,           // whether to enable searching feature or not
 		simpleValue: React.PropTypes.bool,          // pass the value to onChange as a simple value (legacy pre 1.0 mode), defaults to false
 		style: React.PropTypes.object,              // optional style to apply to the control
@@ -148,6 +149,7 @@ const Select = React.createClass({
 			menuBuffer: 0,
 			menuRenderer: defaultMenuRenderer,
 			multi: false,
+			multiSelectAll: false,
 			noResultsText: 'No results found',
 			onBlurResetsInput: true,
 			onCloseResetsInput: true,
@@ -157,6 +159,7 @@ const Select = React.createClass({
 			placeholder: 'Select...',
 			required: false,
 			scrollMenuIntoView: true,
+			scrollToFocused: true,
 			searchable: true,
 			selectAllRenderer: defaultSelectAllRenderer,
 			simpleValue: false,
@@ -212,6 +215,22 @@ const Select = React.createClass({
 	},
 
 	componentDidUpdate (prevProps, prevState) {
+		if (this.props.scrollToFocused) this.scrollOnUpdate();
+		if (prevProps.disabled !== this.props.disabled) {
+			this.setState({ isFocused: false }); // eslint-disable-line react/no-did-update-set-state
+			this.closeMenu();
+		}
+	},
+
+	componentWillUnmount () {
+		if (!document.removeEventListener && document.detachEvent) {
+			document.detachEvent('ontouchstart', this.handleTouchOutside);
+		} else {
+			document.removeEventListener('touchstart', this.handleTouchOutside);
+		}
+	},
+
+	scrollOnUpdate () {
 		// focus to the selected option
 		if (this.menu && this.focused && this.state.isOpen && !this.hasScrolledToOption) {
 			let focusedOptionNode = ReactDOM.findDOMNode(this.focused);
@@ -237,18 +256,6 @@ const Select = React.createClass({
 			if (window.innerHeight < menuContainerRect.bottom + this.props.menuBuffer) {
 				window.scrollBy(0, menuContainerRect.bottom + this.props.menuBuffer - window.innerHeight);
 			}
-		}
-		if (prevProps.disabled !== this.props.disabled) {
-			this.setState({ isFocused: false }); // eslint-disable-line react/no-did-update-set-state
-			this.closeMenu();
-		}
-	},
-
-	componentWillUnmount () {
-		if (!document.removeEventListener && document.detachEvent) {
-			document.detachEvent('ontouchstart', this.handleTouchOutside);
-		} else {
-			document.removeEventListener('touchstart', this.handleTouchOutside);
 		}
 	},
 
@@ -687,6 +694,7 @@ const Select = React.createClass({
 	},
 
 	focusOption (option) {
+		if (this.props.scrollToFocused) { return; };
 		this.setState({
 			focusedOption: option
 		});
@@ -717,6 +725,7 @@ const Select = React.createClass({
 	},
 
 	focusAdjacentOption (dir) {
+		if (this.props.scrollToFocused) { return; }
 		var options = this._visibleOptions
 			.map((option, index) => ({ option, index }))
 			.filter(option => !option.option.disabled);

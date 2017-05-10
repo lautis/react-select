@@ -933,6 +933,7 @@ var Select = _react2['default'].createClass({
 		required: _react2['default'].PropTypes.bool, // applies HTML5 required attribute when needed
 		resetValue: _react2['default'].PropTypes.any, // value to use when you clear the control
 		scrollMenuIntoView: _react2['default'].PropTypes.bool, // boolean to enable the viewport to shift so that the full menu fully visible when engaged
+		scrollToFocused: _react2['default'].PropTypes.bool, // scroll menu to focused element
 		searchable: _react2['default'].PropTypes.bool, // whether to enable searching feature or not
 		simpleValue: _react2['default'].PropTypes.bool, // pass the value to onChange as a simple value (legacy pre 1.0 mode), defaults to false
 		style: _react2['default'].PropTypes.object, // optional style to apply to the control
@@ -974,6 +975,7 @@ var Select = _react2['default'].createClass({
 			menuBuffer: 0,
 			menuRenderer: _utilsDefaultMenuRenderer2['default'],
 			multi: false,
+			multiSelectAll: false,
 			noResultsText: 'No results found',
 			onBlurResetsInput: true,
 			onCloseResetsInput: true,
@@ -983,6 +985,7 @@ var Select = _react2['default'].createClass({
 			placeholder: 'Select...',
 			required: false,
 			scrollMenuIntoView: true,
+			scrollToFocused: true,
 			searchable: true,
 			selectAllRenderer: _utilsDefaultSelectAllRenderer2['default'],
 			simpleValue: false,
@@ -1038,6 +1041,22 @@ var Select = _react2['default'].createClass({
 	},
 
 	componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+		if (this.props.scrollToFocused) this.scrollOnUpdate();
+		if (prevProps.disabled !== this.props.disabled) {
+			this.setState({ isFocused: false }); // eslint-disable-line react/no-did-update-set-state
+			this.closeMenu();
+		}
+	},
+
+	componentWillUnmount: function componentWillUnmount() {
+		if (!document.removeEventListener && document.detachEvent) {
+			document.detachEvent('ontouchstart', this.handleTouchOutside);
+		} else {
+			document.removeEventListener('touchstart', this.handleTouchOutside);
+		}
+	},
+
+	scrollOnUpdate: function scrollOnUpdate() {
 		// focus to the selected option
 		if (this.menu && this.focused && this.state.isOpen && !this.hasScrolledToOption) {
 			var focusedOptionNode = _reactDom2['default'].findDOMNode(this.focused);
@@ -1063,18 +1082,6 @@ var Select = _react2['default'].createClass({
 			if (window.innerHeight < menuContainerRect.bottom + this.props.menuBuffer) {
 				window.scrollBy(0, menuContainerRect.bottom + this.props.menuBuffer - window.innerHeight);
 			}
-		}
-		if (prevProps.disabled !== this.props.disabled) {
-			this.setState({ isFocused: false }); // eslint-disable-line react/no-did-update-set-state
-			this.closeMenu();
-		}
-	},
-
-	componentWillUnmount: function componentWillUnmount() {
-		if (!document.removeEventListener && document.detachEvent) {
-			document.detachEvent('ontouchstart', this.handleTouchOutside);
-		} else {
-			document.removeEventListener('touchstart', this.handleTouchOutside);
 		}
 	},
 
@@ -1544,6 +1551,9 @@ var Select = _react2['default'].createClass({
 	},
 
 	focusOption: function focusOption(option) {
+		if (this.props.scrollToFocused) {
+			return;
+		};
 		this.setState({
 			focusedOption: option
 		});
@@ -1574,6 +1584,9 @@ var Select = _react2['default'].createClass({
 	},
 
 	focusAdjacentOption: function focusAdjacentOption(dir) {
+		if (this.props.scrollToFocused) {
+			return;
+		}
 		var options = this._visibleOptions.map(function (option, index) {
 			return { option: option, index: index };
 		}).filter(function (option) {
