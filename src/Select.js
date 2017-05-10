@@ -1058,7 +1058,10 @@ const Select = React.createClass({
 	},
 
 	selectAllValues() {
-		this.addValue(this._visibleOptions);
+		const selected = this.getValueArray(this.props.value);
+		const unselectedOptions = this._visibleOptions
+			.filter((value) => !selected.some((other) => other.value == value.value));
+		this.addValue(unselectedOptions);
 	},
 
 	renderSelectAll(valueArray, focusedOption) {

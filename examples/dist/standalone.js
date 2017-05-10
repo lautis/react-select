@@ -1928,7 +1928,13 @@ var Select = _react2['default'].createClass({
 	},
 
 	selectAllValues: function selectAllValues() {
-		this.addValue(this._visibleOptions);
+		var selected = this.getValueArray(this.props.value);
+		var unselectedOptions = this._visibleOptions.filter(function (value) {
+			return !selected.some(function (other) {
+				return other.value == value.value;
+			});
+		});
+		this.addValue(unselectedOptions);
 	},
 
 	renderSelectAll: function renderSelectAll(valueArray, focusedOption) {
