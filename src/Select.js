@@ -13,6 +13,7 @@ import defaultArrowRenderer from './utils/defaultArrowRenderer';
 import defaultFilterOptions from './utils/defaultFilterOptions';
 import defaultMenuRenderer from './utils/defaultMenuRenderer';
 import defaultClearRenderer from './utils/defaultClearRenderer';
+import defaultSelectAllRenderer from './utils/defaultSelectAllRenderer';
 
 import Async from './Async';
 import AsyncCreatable from './AsyncCreatable';
@@ -81,6 +82,7 @@ const Select = React.createClass({
 		menuRenderer: React.PropTypes.func,         // renders a custom menu with options
 		menuStyle: React.PropTypes.object,          // optional style to apply to the menu
 		multi: React.PropTypes.bool,                // multi-value input
+		multiSelectAll: React.PropTypes.bool,       // incude 'Select All' option for multi-value input
 		name: React.PropTypes.string,               // generates a hidden <input /> tag with this field name for html forms
 		noResultsText: stringOrNode,                // placeholder displayed when there are no matching search results
 		onBlur: React.PropTypes.func,               // onBlur handler: function (event) {}
@@ -156,6 +158,7 @@ const Select = React.createClass({
 			required: false,
 			scrollMenuIntoView: true,
 			searchable: true,
+			selectAllRenderer: defaultSelectAllRenderer,
 			simpleValue: false,
 			tabSelectsValue: true,
 			valueComponent: Value,
@@ -1045,8 +1048,36 @@ const Select = React.createClass({
 		return null;
 	},
 
+	selectAllValues() {
+		this.addValue(this._visibleOptions);
+	},
+
+	renderSelectAll(valueArray, focusedOption) {
+		if (this.props.multi && this.props.multiSelectAll) {
+			return this.props.selectAllRenderer({
+				focusedOption,
+				focusOption: this.focusOption,
+				instancePrefix: this._instancePrefix,
+				labelKey: this.props.labelKey,
+				onFocus: this.focusOption,
+				onSelect: this.selectAllValues,
+				optionClassName: this.props.optionClassName,
+				optionComponent: this.props.optionComponent,
+				optionRenderer: this.props.optionRenderer || this.getOptionLabel,
+				selectValue: this.selectAllValues	,
+				valueArray,
+				valueKey: this.props.valueKey,
+				onOptionRef: this.onOptionRef,
+			});
+
+		} else {
+			return null;
+		}
+	},
+
 	renderOuter (options, valueArray, focusedOption) {
 		let menu = this.renderMenu(options, valueArray, focusedOption);
+		let selectAll = this.renderSelectAll(valueArray, focusedOption);
 		if (!menu) {
 			return null;
 		}
@@ -1057,6 +1088,7 @@ const Select = React.createClass({
 						 style={this.props.menuStyle}
 						 onScroll={this.handleMenuScroll}
 						 onMouseDown={this.handleMouseDownOnMenu}>
+					{selectAll}
 					{menu}
 				</div>
 			</div>
