@@ -109,6 +109,8 @@ const Select = React.createClass({
 		scrollMenuIntoView: React.PropTypes.bool,   // boolean to enable the viewport to shift so that the full menu fully visible when engaged
 		scrollToFocused: React.PropTypes.bool,      // scroll menu to focused element
 		searchable: React.PropTypes.bool,           // whether to enable searching feature or not
+		selectAllComponent: React.PropTypes.func,   // component to render select all
+		selectAllRenderer: React.PropTypes.func,    // renderer for select all
 		simpleValue: React.PropTypes.bool,          // pass the value to onChange as a simple value (legacy pre 1.0 mode), defaults to false
 		style: React.PropTypes.object,              // optional style to apply to the control
 		tabIndex: React.PropTypes.string,           // optional tab index of the control
@@ -161,6 +163,7 @@ const Select = React.createClass({
 			scrollMenuIntoView: true,
 			scrollToFocused: true,
 			searchable: true,
+			selectAllComponent: Option,
 			selectAllRenderer: defaultSelectAllRenderer,
 			simpleValue: false,
 			tabSelectsValue: true,
@@ -1073,8 +1076,8 @@ const Select = React.createClass({
 				labelKey: this.props.labelKey,
 				onFocus: this.focusOption,
 				onSelect: this.selectAllValues,
-				optionClassName: this.props.optionClassName,
-				optionComponent: this.props.optionComponent,
+				selectAllClassName: this.props.optionClassName,
+				selectAllComponent: this.props.selectAllComponent,
 				optionRenderer: this.props.optionRenderer || this.getOptionLabel,
 				selectValue: this.selectAllValues	,
 				valueArray,

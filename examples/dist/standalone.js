@@ -935,6 +935,8 @@ var Select = _react2['default'].createClass({
 		scrollMenuIntoView: _react2['default'].PropTypes.bool, // boolean to enable the viewport to shift so that the full menu fully visible when engaged
 		scrollToFocused: _react2['default'].PropTypes.bool, // scroll menu to focused element
 		searchable: _react2['default'].PropTypes.bool, // whether to enable searching feature or not
+		selectAllComponent: _react2['default'].PropTypes.func, // component to render select all
+		selectAllRenderer: _react2['default'].PropTypes.func, // renderer for select all
 		simpleValue: _react2['default'].PropTypes.bool, // pass the value to onChange as a simple value (legacy pre 1.0 mode), defaults to false
 		style: _react2['default'].PropTypes.object, // optional style to apply to the control
 		tabIndex: _react2['default'].PropTypes.string, // optional tab index of the control
@@ -987,6 +989,7 @@ var Select = _react2['default'].createClass({
 			scrollMenuIntoView: true,
 			scrollToFocused: true,
 			searchable: true,
+			selectAllComponent: _Option2['default'],
 			selectAllRenderer: _utilsDefaultSelectAllRenderer2['default'],
 			simpleValue: false,
 			tabSelectsValue: true,
@@ -1946,8 +1949,8 @@ var Select = _react2['default'].createClass({
 				labelKey: this.props.labelKey,
 				onFocus: this.focusOption,
 				onSelect: this.selectAllValues,
-				optionClassName: this.props.optionClassName,
-				optionComponent: this.props.optionComponent,
+				selectAllClassName: this.props.optionClassName,
+				selectAllComponent: this.props.selectAllComponent,
 				optionRenderer: this.props.optionRenderer || this.getOptionLabel,
 				selectValue: this.selectAllValues,
 				valueArray: valueArray,
@@ -2360,14 +2363,14 @@ function selectAllRenderer(_ref) {
 	var labelKey = _ref.labelKey;
 	var onFocus = _ref.onFocus;
 	var onSelect = _ref.onSelect;
-	var optionClassName = _ref.optionClassName;
-	var optionComponent = _ref.optionComponent;
+	var selectAllClassName = _ref.selectAllClassName;
+	var selectAllComponent = _ref.selectAllComponent;
 	var optionRenderer = _ref.optionRenderer;
 	var valueArray = _ref.valueArray;
 	var valueKey = _ref.valueKey;
 	var onOptionRef = _ref.onOptionRef;
 
-	var Option = optionComponent;
+	var SelectAll = selectAllComponent;
 	var options = [{ key: multiSelectAllValue, label: 'Select All' }];
 	return options.map(function (option, i) {
 		var isSelected = valueArray && valueArray.indexOf(option) > -1;

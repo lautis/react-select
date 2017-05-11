@@ -9,19 +9,19 @@ function selectAllRenderer ({
 	labelKey,
 	onFocus,
 	onSelect,
-	optionClassName,
-	optionComponent,
+	selectAllClassName,
+	selectAllComponent,
 	optionRenderer,
 	valueArray,
 	valueKey,
 	onOptionRef
 }) {
-	let Option = optionComponent;
+	let SelectAll = selectAllComponent;
 	const options = [{ key: multiSelectAllValue, label: 'Select All' }];
 	return options.map((option, i) => {
 		let isSelected = valueArray && valueArray.indexOf(option) > -1;
 		let isFocused = option === focusedOption;
-		let optionClass = classNames(optionClassName, {
+		let selectAllClass = classNames(selectAllClassName, {
 			'Select-option': true,
 			'is-selected': isSelected,
 			'is-focused': isFocused,
@@ -29,8 +29,8 @@ function selectAllRenderer ({
 		});
 
 		return (
-			<Option
-				className={optionClass}
+			<SelectAll
+				className={selectAllClass}
 				instancePrefix={instancePrefix}
 				isDisabled={option.disabled}
 				isFocused={isFocused}
