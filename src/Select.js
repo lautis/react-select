@@ -1068,14 +1068,13 @@ const Select = React.createClass({
 	},
 
 	allSelected(valueArray) {
-		const containsAll = (a, b) => b.every(item => a.includes(item))
+		const containsAll = (a, b) => b.every(item => a.includes(item));
 		return containsAll(this._visibleOptions, valueArray) &&
-			containsAll(valueArray, this._visibleOptions)
+			containsAll(valueArray, this._visibleOptions);
 	},
 
 	renderSelectAll(valueArray, focusedOption) {
 		if (this.props.multi && this.props.multiSelectAll) {
-			this._visibleOptions
 			return this.props.selectAllRenderer({
 				focusedOption,
 				focusOption: this.focusOption,

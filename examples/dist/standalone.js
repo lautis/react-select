@@ -1951,7 +1951,6 @@ var Select = _react2['default'].createClass({
 
 	renderSelectAll: function renderSelectAll(valueArray, focusedOption) {
 		if (this.props.multi && this.props.multiSelectAll) {
-			this._visibleOptions;
 			return this.props.selectAllRenderer({
 				focusedOption: focusedOption,
 				focusOption: this.focusOption,
