@@ -1940,8 +1940,18 @@ var Select = _react2['default'].createClass({
 		this.addValue(unselectedOptions);
 	},
 
+	allSelected: function allSelected(valueArray) {
+		var containsAll = function containsAll(a, b) {
+			return b.every(function (item) {
+				return a.includes(item);
+			});
+		};
+		return containsAll(this._visibleOptions, valueArray) && containsAll(valueArray, this._visibleOptions);
+	},
+
 	renderSelectAll: function renderSelectAll(valueArray, focusedOption) {
 		if (this.props.multi && this.props.multiSelectAll) {
+			this._visibleOptions;
 			return this.props.selectAllRenderer({
 				focusedOption: focusedOption,
 				focusOption: this.focusOption,
@@ -1953,7 +1963,7 @@ var Select = _react2['default'].createClass({
 				selectAllComponent: this.props.selectAllComponent,
 				optionRenderer: this.props.optionRenderer || this.getOptionLabel,
 				selectValue: this.selectAllValues,
-				valueArray: valueArray,
+				isSelected: this.allSelected(valueArray),
 				valueKey: this.props.valueKey,
 				onOptionRef: this.onOptionRef
 			});
@@ -2366,16 +2376,15 @@ function selectAllRenderer(_ref) {
 	var selectAllClassName = _ref.selectAllClassName;
 	var selectAllComponent = _ref.selectAllComponent;
 	var optionRenderer = _ref.optionRenderer;
-	var valueArray = _ref.valueArray;
+	var isSelected = _ref.isSelected;
 	var valueKey = _ref.valueKey;
 	var onOptionRef = _ref.onOptionRef;
 
 	var SelectAll = selectAllComponent;
 	var options = [{ key: multiSelectAllValue, label: 'Select All' }];
 	return options.map(function (option, i) {
-		var isSelected = valueArray && valueArray.indexOf(option) > -1;
 		var isFocused = option === focusedOption;
-		var optionClass = (0, _classnames2['default'])(optionClassName, {
+		var selectAllClass = (0, _classnames2['default'])(selectAllClassName, {
 			'Select-option': true,
 			'is-selected': isSelected,
 			'is-focused': isFocused,
@@ -2383,9 +2392,9 @@ function selectAllRenderer(_ref) {
 		});
 
 		return _react2['default'].createElement(
-			Option,
+			SelectAll,
 			{
-				className: optionClass,
+				className: selectAllClass,
 				instancePrefix: instancePrefix,
 				isDisabled: option.disabled,
 				isFocused: isFocused,

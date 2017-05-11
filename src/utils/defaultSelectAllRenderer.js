@@ -12,14 +12,13 @@ function selectAllRenderer ({
 	selectAllClassName,
 	selectAllComponent,
 	optionRenderer,
-	valueArray,
+	isSelected,
 	valueKey,
 	onOptionRef
 }) {
 	let SelectAll = selectAllComponent;
 	const options = [{ key: multiSelectAllValue, label: 'Select All' }];
 	return options.map((option, i) => {
-		let isSelected = valueArray && valueArray.indexOf(option) > -1;
 		let isFocused = option === focusedOption;
 		let selectAllClass = classNames(selectAllClassName, {
 			'Select-option': true,
@@ -43,7 +42,7 @@ function selectAllRenderer ({
 				ref={ref => { onOptionRef(ref, isFocused); }}
 			>
 				{optionRenderer(option, i)}
-			</Option>
+			</SelectAll>
 		);
 	});
 }
