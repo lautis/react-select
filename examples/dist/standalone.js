@@ -1945,12 +1945,9 @@ var Select = _react2['default'].createClass({
 	},
 
 	allSelected: function allSelected(valueArray) {
-		var containsAll = function containsAll(a, b) {
-			return b.every(function (item) {
-				return a.includes(item);
-			});
-		};
-		return containsAll(this._visibleOptions, valueArray) && containsAll(valueArray, this._visibleOptions);
+		return this._visibleOptions.every(function (item) {
+			return valueArray.includes(item);
+		});
 	},
 
 	renderSelectAll: function renderSelectAll(valueArray, focusedOption) {
