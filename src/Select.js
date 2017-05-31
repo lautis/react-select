@@ -1064,11 +1064,15 @@ const Select = React.createClass({
 		return null;
 	},
 
-	selectAllValues() {
+	toggleAllValues() {
 		const selected = this.getValueArray(this.props.value);
-		const unselectedOptions = this._visibleOptions
-			.filter((value) => !selected.some((other) => other.value == value.value));
-		this.addValue(unselectedOptions);
+		if(this.allSelected(selected)) {
+			this.setValue([]);
+		} else {
+			const unselectedOptions = this._visibleOptions
+				.filter((value) => !selected.some((other) => other.value == value.value));
+			this.addValue(unselectedOptions);
+		}
 	},
 
 	allSelected(valueArray) {
@@ -1083,11 +1087,11 @@ const Select = React.createClass({
 				instancePrefix: this._instancePrefix,
 				labelKey: this.props.labelKey,
 				onFocus: this.focusOption,
-				onSelect: this.selectAllValues,
+				onSelect: this.toggleAllValues,
 				selectAllClassName: this.props.optionClassName,
 				selectAllComponent: this.props.selectAllComponent,
 				optionRenderer: this.props.optionRenderer || this.getOptionLabel,
-				selectValue: this.selectAllValues	,
+				selectValue: this.toggleAllValues	,
 				isSelected: this.allSelected(valueArray),
 				valueKey: this.props.valueKey,
 				onOptionRef: this.onOptionRef,
