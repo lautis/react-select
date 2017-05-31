@@ -1936,12 +1936,16 @@ var Select = _react2['default'].createClass({
 
 	selectAllValues: function selectAllValues() {
 		var selected = this.getValueArray(this.props.value);
-		var unselectedOptions = this._visibleOptions.filter(function (value) {
-			return !selected.some(function (other) {
-				return other.value == value.value;
+		if (this.allSelected(selected)) {
+			this.addValue([]);
+		} else {
+			var unselectedOptions = this._visibleOptions.filter(function (value) {
+				return !selected.some(function (other) {
+					return other.value == value.value;
+				});
 			});
-		});
-		this.addValue(unselectedOptions);
+			this.addValue(unselectedOptions);
+		}
 	},
 
 	allSelected: function allSelected(valueArray) {
@@ -2381,7 +2385,7 @@ function selectAllRenderer(_ref) {
 	var onOptionRef = _ref.onOptionRef;
 
 	var SelectAll = selectAllComponent;
-	var options = [{ key: multiSelectAllValue, label: 'Select All' }];
+	var options = [{ key: multiSelectAllValue, label: isSelected ? 'Deselect all' : 'Select All' }];
 	return options.map(function (option, i) {
 		var isFocused = option === focusedOption;
 		var selectAllClass = (0, _classnames2['default'])(selectAllClassName, {

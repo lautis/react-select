@@ -1066,9 +1066,13 @@ const Select = React.createClass({
 
 	selectAllValues() {
 		const selected = this.getValueArray(this.props.value);
-		const unselectedOptions = this._visibleOptions
-			.filter((value) => !selected.some((other) => other.value == value.value));
-		this.addValue(unselectedOptions);
+		if(this.allSelected(selected)) {
+			this.addValue([]);
+		} else {
+			const unselectedOptions = this._visibleOptions
+				.filter((value) => !selected.some((other) => other.value == value.value));
+			this.addValue(unselectedOptions);
+		}
 	},
 
 	allSelected(valueArray) {

@@ -17,7 +17,7 @@ function selectAllRenderer ({
 	onOptionRef
 }) {
 	let SelectAll = selectAllComponent;
-	const options = [{ key: multiSelectAllValue, label: 'Select All' }];
+	const options = [{ key: multiSelectAllValue, label: isSelected ? 'Deselect all' : 'Select All' }];
 	return options.map((option, i) => {
 		let isFocused = option === focusedOption;
 		let selectAllClass = classNames(selectAllClassName, {
