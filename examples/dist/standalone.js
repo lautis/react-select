@@ -1934,14 +1934,18 @@ var Select = _react2['default'].createClass({
 		return null;
 	},
 
-	selectAllValues: function selectAllValues() {
+	toggleAllValues: function toggleAllValues() {
 		var selected = this.getValueArray(this.props.value);
-		var unselectedOptions = this._visibleOptions.filter(function (value) {
-			return !selected.some(function (other) {
-				return other.value == value.value;
+		if (this.allSelected(selected)) {
+			this.setValue([]);
+		} else {
+			var unselectedOptions = this._visibleOptions.filter(function (value) {
+				return !selected.some(function (other) {
+					return other.value == value.value;
+				});
 			});
-		});
-		this.addValue(unselectedOptions);
+			this.addValue(unselectedOptions);
+		}
 	},
 
 	allSelected: function allSelected(valueArray) {
@@ -1958,11 +1962,11 @@ var Select = _react2['default'].createClass({
 				instancePrefix: this._instancePrefix,
 				labelKey: this.props.labelKey,
 				onFocus: this.focusOption,
-				onSelect: this.selectAllValues,
+				onSelect: this.toggleAllValues,
 				selectAllClassName: this.props.optionClassName,
 				selectAllComponent: this.props.selectAllComponent,
 				optionRenderer: this.props.optionRenderer || this.getOptionLabel,
-				selectValue: this.selectAllValues,
+				selectValue: this.toggleAllValues,
 				isSelected: this.allSelected(valueArray),
 				valueKey: this.props.valueKey,
 				onOptionRef: this.onOptionRef
@@ -2381,7 +2385,7 @@ function selectAllRenderer(_ref) {
 	var onOptionRef = _ref.onOptionRef;
 
 	var SelectAll = selectAllComponent;
-	var options = [{ key: multiSelectAllValue, label: 'Select All' }];
+	var options = [{ key: multiSelectAllValue, label: isSelected ? 'Deselect All' : 'Select All' }];
 	return options.map(function (option, i) {
 		var isFocused = option === focusedOption;
 		var selectAllClass = (0, _classnames2['default'])(selectAllClassName, {
